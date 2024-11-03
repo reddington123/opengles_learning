@@ -3,34 +3,32 @@ package com.example.opengles_learning;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
-import android.widget.TextView;
-
-import com.example.opengles_learning.databinding.ActivityMainBinding;
+import android.util.Log;
 
 public class MainActivity extends AppCompatActivity {
 
-    // Used to load the 'opengles_learning' library on application startup.
-    static {
-        System.loadLibrary("opengles_learning");
-    }
+    private static String LOGTAG = "SimpleTriangle";
 
-    private ActivityMainBinding binding;
+    protected TutorialView graphicsView;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    @Override protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
 
-        binding = ActivityMainBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
-
-        // Example of a call to a native method
-        TextView tv = binding.sampleText;
-        tv.setText(stringFromJNI());
+        Log.i(LOGTAG, "Creating New Tutorial View");
+        graphicsView = new TutorialView(getApplication());
+        setContentView(graphicsView);
     }
 
-    /**
-     * A native method that is implemented by the 'opengles_learning' native library,
-     * which is packaged with this application.
-     */
-    public native String stringFromJNI();
+    @Override protected void onPause()
+    {
+        super.onPause();
+        graphicsView.onPause();
+    }
+
+    @Override protected void onResume()
+    {
+        super.onResume();
+        graphicsView.onResume();
+    }
 }
